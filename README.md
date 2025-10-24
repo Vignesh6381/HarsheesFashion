@@ -1,70 +1,249 @@
-# Getting Started with Create React App
+# Harshees Fashion Backend API
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A complete e-commerce backend API built with Node.js, Express, and MongoDB for the Harshees Fashion platform.
 
-## Available Scripts
+## 🚀 Features
 
-In the project directory, you can run:
+- **User Authentication** - JWT-based auth with bcrypt password hashing
+- **Product Management** - CRUD operations with advanced filtering and search
+- **Order Management** - Complete order lifecycle from creation to delivery
+- **Category System** - Hierarchical product categories
+- **Shopping Cart** - Persistent cart functionality
+- **Wishlist** - Save favorite products
+- **Reviews & Ratings** - Customer feedback system
+- **Admin Panel** - Admin-only routes for management
+- **File Uploads** - Image handling with Cloudinary integration
+- **Email Notifications** - Order confirmations and updates
+- **API Documentation** - Swagger/OpenAPI documentation
+- **Security** - Helmet, CORS, rate limiting, input validation
+- **Performance** - Compression, database indexing
 
-### `npm start`
+## 📋 Prerequisites
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Node.js (v14 or higher)
+- MongoDB (v4 or higher)
+- npm or yarn
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🛠️ Installation
 
-### `npm test`
+1. **Clone the repository**
+```bash
+git clone https://github.com/your-username/harshees-fashion-backend.git
+cd harshees-fashion-backend
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. **Install dependencies**
+```bash
+npm install
+```
 
-### `npm run build`
+3. **Environment Setup**
+Create a `.env` file in the root directory:
+```env
+NODE_ENV=development
+PORT=5000
+MONGODB_URI=mongodb://localhost:27017/harshees-fashion
+JWT_SECRET=your-super-secret-jwt-key
+JWT_EXPIRE=7d
+FRONTEND_URL=http://localhost:3000
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Email Configuration
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-app-password
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Cloudinary (Optional)
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+4. **Start MongoDB**
+```bash
+# If using local MongoDB
+mongod
 
-### `npm run eject`
+# If using MongoDB Atlas, update MONGODB_URI in .env
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+5. **Seed Database (Optional)**
+```bash
+npm run seed
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+6. **Start the server**
+```bash
+# Development mode with nodemon
+npm run dev
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# Production mode
+npm start
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 📚 API Documentation
 
-## Learn More
+Once the server is running, visit:
+- **Swagger UI**: http://localhost:5000/api-docs
+- **Health Check**: http://localhost:5000/api/health
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🛣️ API Routes
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Authentication
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - User login
+- `GET /api/auth/me` - Get current user profile
+- `POST /api/auth/logout` - Logout user
 
-### Code Splitting
+### Products
+- `GET /api/products` - Get all products (with filtering)
+- `GET /api/products/:id` - Get single product
+- `GET /api/products/featured/list` - Get featured products
+- `GET /api/products/new/arrivals` - Get new arrivals
+- `POST /api/products/:id/reviews` - Add product review
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Orders
+- `POST /api/orders` - Create new order
+- `GET /api/orders/my` - Get user's orders
+- `GET /api/orders/:id` - Get single order
+- `PATCH /api/orders/:id/status` - Update order status (Admin)
 
-### Analyzing the Bundle Size
+### Categories
+- `GET /api/categories` - Get all categories
+- `GET /api/categories/:id` - Get single category
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### User Account
+- `POST /api/users/wishlist/:productId` - Add/remove from wishlist
+- `GET /api/users/wishlist` - Get user wishlist
+- `POST /api/users/cart` - Add to cart
+- `GET /api/users/cart` - Get user cart
+- `PATCH /api/users/cart/:itemId` - Update cart item
+- `DELETE /api/users/cart/:itemId` - Remove from cart
 
-### Making a Progressive Web App
+## 🔐 Authentication
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+The API uses JWT (JSON Web Tokens) for authentication. Include the token in the Authorization header:
 
-### Advanced Configuration
+```http
+Authorization: Bearer your-jwt-token
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## 📊 Database Models
 
-### Deployment
+### User
+- Personal information (name, email, phone)
+- Authentication (password, role)
+- Shopping cart and wishlist
+- Multiple addresses
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Product
+- Basic info (name, description, price)
+- Images and categories
+- Inventory management (sizes, stock)
+- Reviews and ratings
+- SEO metadata
 
-### `npm run build` fails to minify
+### Order
+- Order items and pricing
+- Shipping address
+- Payment information
+- Status tracking
+- Order history
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Category
+- Hierarchical structure
+- SEO-friendly slugs
+- Image and metadata
+
+## 🚀 Deployment
+
+### Using PM2 (Recommended)
+```bash
+npm install -g pm2
+pm2 start server.js --name "harshees-api"
+pm2 startup
+pm2 save
+```
+
+### Using Docker
+```bash
+# Build image
+docker build -t harshees-fashion-api .
+
+# Run container
+docker run -p 5000:5000 --env-file .env harshees-fashion-api
+```
+
+### Environment Variables for Production
+```env
+NODE_ENV=production
+PORT=5000
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/harshees-fashion
+JWT_SECRET=your-production-jwt-secret
+FRONTEND_URL=https://your-frontend-domain.com
+```
+
+## 🧪 Testing
+
+```bash
+# Run tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
+```
+
+## 📈 Performance Optimization
+
+- **Database Indexing**: Optimized queries with proper indexes
+- **Compression**: Gzip compression for responses
+- **Rate Limiting**: Prevents API abuse
+- **Caching**: Redis integration for frequently accessed data
+- **Image Optimization**: Cloudinary for image processing
+
+## 🔒 Security Features
+
+- **Helmet**: Security headers
+- **CORS**: Cross-origin resource sharing
+- **Rate Limiting**: Prevents brute force attacks
+- **Input Validation**: Express-validator for request validation
+- **Password Hashing**: Bcrypt with salt rounds
+- **JWT Security**: Secure token generation and validation
+
+## 📝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🆘 Support
+
+For support, email support@harsheefashion.com or create an issue in the repository.
+
+## 🔄 API Versioning
+
+Current version: `v1`
+All endpoints are prefixed with `/api/`
+
+## 📱 Frontend Integration
+
+This backend is designed to work with the Harshees Fashion React frontend. Update the frontend API base URL to:
+
+```javascript
+const API_BASE_URL = 'http://localhost:5000/api';
+```
+
+## 🎯 Roadmap
+
+- [ ] Payment gateway integration (Stripe/Razorpay)
+- [ ] Real-time notifications with Socket.io
+- [ ] Advanced analytics and reporting
+- [ ] Multi-language support
+- [ ] Mobile app API endpoints
+- [ ] Microservices architecture migration// ================================
