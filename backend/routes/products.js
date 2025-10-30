@@ -45,4 +45,30 @@ router.post('/add', upload.single('image'), async (req, res) => {
   }
 });
 
+// ✅ GET: Fetch all products with pagination
+router.get('/', async (req, res) => {
+  try {
+    const { page = 1, limit = 12, sort = 'newest' } = req.query;
+
+    const products = await Product.find()
+      .sort(sort === 'newest' ? { createdAt: -1 } : {})
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
+
+    res.json({ success: true, products });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error fetching products', error: error.message });
+  }
+});
+
+// ✅ GET: Fetch featured products
+router.get('/featured/list', async (req, res) => {
+  try {
+    const featuredProducts = await Product.find({ isFeatured: true }).limit(8);
+    res.json({ success: true, featuredProducts });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error fetching featured products', error: error.message });
+  }
+});
+
 module.exports = router;
