@@ -29,10 +29,23 @@ app.use(helmet()); // Security headers
 app.use(compression()); // Compress responses
 app.use(morgan('combined')); // Logging
 app.use(limiter); // Rate limiting
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://www.harsheesfashions.com',
+  'https://harsheesfashions.com'
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS not allowed for this origin: ' + origin));
+    }
+  },
   credentials: true
 }));
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
@@ -81,7 +94,7 @@ if (process.env.NODE_ENV !== 'production') {
       },
       servers: [
         {
-          url: `http://localhost:${PORT}`,
+          url: `https://harsheesfashions.com:${PORT}`,
           description: 'Development server',
         },
       ],
@@ -113,7 +126,7 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
-  console.log(`📖 API Documentation: http://localhost:${PORT}/api-docs`);
+  console.log(`📖 API Documentation: https://harsheesfashions.com:${PORT}/api-docs`);
 });
 
 module.exports = app;
